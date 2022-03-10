@@ -1,0 +1,7 @@
+add_subdirectory(glad)
+add_subdirectory(ProgramHandler)
+add_subdirectory(shader)
+add_subdirectory(gl_utils)
+add_subdirectory(utils)
+add_subdirectory(framebuffer)
+add_subdirectory(texture)
