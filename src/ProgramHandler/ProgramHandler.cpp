@@ -1,10 +1,12 @@
 #include "ProgramHandler.hpp"
 
+
+
 void ProgramHandler::createPendulums()
 {
 	m_pendulums.resize(m_max_pendulums);
 
-	m_pColors = std::vector<float>(
+	std::vector<float> tColors(
 			{
 				1.0,1.0,1.0,1.0,
 				1.0,0.0,0.0,1.0,
@@ -14,6 +16,26 @@ void ProgramHandler::createPendulums()
 				1.0,0.0,1.0,1.0,
 				0.0,0.0,1.0,1.0
 			});
+
+	uint32_t cSize = tColors.size() / 4 ;
+
+	for(int i = 0; i < cSize - 1; i++)
+	{		
+		std::vector<float> v1 = std::vector<float>({tColors[4 * i + 0],tColors[4 * i + 1], tColors[4 * i + 2], tColors[4 * i + 3]});
+		std::vector<float> v2 = std::vector<float>({tColors[4 * (i + 1) + 0],tColors[4 * (i + 1) + 1], tColors[4 * (i + 1) + 2], tColors[4 * (i + 1) + 3]});
+		
+		
+		//m_pColors.insert(m_pColors.end(),v1.begin(),v1.end());
+		for(float r = 0; r <= 1.0f; r += static_cast<float>(cSize - 1) / m_num_pendulums)
+		{
+			std::vector<float> d;
+			mix_vec4(v1,v2,r,d);	
+			m_pColors.insert(m_pColors.end(),d.begin(),d.end());
+		}
+		m_pColors.insert(m_pColors.end(),v2.begin(),v2.end());
+	}
+	m_pColors.insert(m_pColors.end(),tColors.end() - 4,tColors.end());
+	if(m_pColors.size() / 4 < m_num_pendulums) std::cout << "num_colors : " << m_pColors.size() / 4 << ", num_pend: " << m_num_pendulums << "\n";
 }
 
 void ProgramHandler::resetPendulums()
@@ -27,13 +49,13 @@ void ProgramHandler::resetPendulums()
 
 		p.a1 =  angle;
 		p.a2 = 3 * M_PI / 4;
-		p.l1 = 0.5;
-		p.l2 = 0.5;
+		p.l1 = 0.9;
+		p.l2 = 0.9;
 
 		p.m1 = 40;
 		p.m2 = 40;
 
-		i++;;
+		i++;
 	}
 }
 
@@ -229,7 +251,7 @@ void ProgramHandler::run()
 		GLCALL(	glDrawElements(GL_LINES,m_num_pendulums * 4,GL_UNSIGNED_INT,NULL)	);
 
 		//fade points
-		if(pointsTimer >= 1.0f / 180.0f)
+		if(pointsTimer >= 1.0f / 15.0f)
 		{
 			m_quad_screen.bindAll();
 			m_framebuffer.bindTexture(m_points_texture.getId());

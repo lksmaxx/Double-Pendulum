@@ -1,6 +1,6 @@
 #version 430
 
-uniform vec4 u_colors[20];
+uniform vec4 u_colors[500];
 
 flat in int f_id;
 

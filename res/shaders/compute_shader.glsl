@@ -10,12 +10,12 @@ struct Pendulum
 
 layout(std430,binding = 0) buffer PendBuf
 {
-	Pendulum pendulums[20];
+	Pendulum pendulums[200];
 };
 
 layout(std430,binding = 1) buffer PointsBuf
 {
-	vec2	points[60];
+	vec2	points[600];
 };
 
 #define p pendulums[my_id]

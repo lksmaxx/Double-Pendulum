@@ -32,8 +32,8 @@ class ProgramHandler
 	GLFWwindow 		*m_window;
 	bool 			m_reset;
 
-	const uint32_t 	m_max_pendulums = 20;
-	uint32_t 		m_num_pendulums = 7;
+	const uint32_t 	m_max_pendulums = 500;
+	uint32_t 		m_num_pendulums = 500;
 	FrameBuffer 	m_framebuffer;
 	GL::Context 	m_lines_context,m_points_context;
 	GL::Quad 		m_quad_screen;
