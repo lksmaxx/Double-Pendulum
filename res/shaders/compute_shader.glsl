@@ -34,7 +34,7 @@ void main()
 {
  	const uint my_id = gl_GlobalInvocationID.x;
 	
-	float g = 1;
+	float g = 0.5;
 	float w1s = 0;
 	float w2s = 0;
 	//equations...

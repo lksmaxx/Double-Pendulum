@@ -18,12 +18,14 @@ void ProgramHandler::createPendulums()
 
 void ProgramHandler::resetPendulums()
 {
-	float i = 0;
+	int i = 0;
+	float angle = M_PI / 2.0f;
 	for(Pendulum &p : m_pendulums)
 	{
+		angle = std::nextafter(angle, angle + 1);
 		p = {0};
 
-		p.a1 = (M_PI / 2) + i/ 100000;
+		p.a1 =  angle;
 		p.a2 = 3 * M_PI / 4;
 		p.l1 = 0.5;
 		p.l2 = 0.5;
@@ -31,7 +33,7 @@ void ProgramHandler::resetPendulums()
 		p.m1 = 40;
 		p.m2 = 40;
 
-		i += 1.0f;
+		i++;;
 	}
 }
 
@@ -201,9 +203,9 @@ void ProgramHandler::run()
     	deltaTime = currentFrame - lastFrame;
     	lastFrame = currentFrame;
 	
-		static float compTimer = 0;
+		static float compTimer = 0,pointsTimer = 0;
 		compTimer += deltaTime;
-
+		pointsTimer += deltaTime;
 		
 		//compute shader
 		m_compute_shader.use();
@@ -211,7 +213,7 @@ void ProgramHandler::run()
 		GLCALL(	glDispatchCompute(m_num_pendulums,1,1)	);	
  		GLCALL(	glMemoryBarrier(GL_ALL_BARRIER_BITS)	);
 
-
+		
 		//draw lines to texture
 		m_framebuffer.bind();
 		m_framebuffer.bindTexture(m_lines_texture.getId());
@@ -227,20 +229,21 @@ void ProgramHandler::run()
 		GLCALL(	glDrawElements(GL_LINES,m_num_pendulums * 4,GL_UNSIGNED_INT,NULL)	);
 
 		//fade points
-		m_quad_screen.bindAll();
-		m_framebuffer.bindTexture(m_points_texture.getId());
-		m_points_texture.bind(0);
-		m_blend_shader.use();
-		GLCALL( glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,NULL)	);	
-
-	
+		if(pointsTimer >= 1.0f / 180.0f)
+		{
+			m_quad_screen.bindAll();
+			m_framebuffer.bindTexture(m_points_texture.getId());
+			m_points_texture.bind(0);
+			m_blend_shader.use();
+			GLCALL( glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,NULL)	);	
+			pointsTimer = 0;
+		}
 		//draw points to texture
 		m_framebuffer.bindTexture(m_points_texture.getId());
 
 		GLCALL( glBindVertexArray(m_points_context.vao)	);
 		GLCALL(	glBindBuffer(GL_ARRAY_BUFFER,m_points_context.vbo)	);
 		m_points_shader.use();
-		m_points_shader.setUniform4f("u_color",std::vector<float>({0,0,1,1}));	
 
 		if(reset == true)
 		{

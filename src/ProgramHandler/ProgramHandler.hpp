@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 #include <gl_utils/gl_utils.hpp>
 #include <utils/utils.hpp>
