@@ -4,11 +4,11 @@ project(DP_proj)
 
 add_executable(DPend main.cpp)
 
-add_subdirectory(src)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src)
 
-target_include_directories(DPend PUBLIC src)
+target_include_directories(DPend PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
-target_link_directories(DPend PUBLIC lib)
+target_link_directories(DPend PUBLIC ${CMAKE_SOURCE_DIR}/lib)
 
 target_link_libraries(DPend PUBLIC X11 ${CMAKE_SOURCE_DIR}/lib/libglfw3.a GL Xxf86vm Xrandr pthread Xi dl Xinerama Xcursor) 
 
